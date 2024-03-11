@@ -28,13 +28,13 @@ Before you begin, ensure you have the following installed on your system:
 
 4. **Apply migrations**:
    ```
-   python manage.py migrate
+   python3 manage.py migrate
    ```
 
 ## Running the Server
 To start the development server, run:
 ```
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 The server will start running at `http://127.0.0.1:8000/`.
