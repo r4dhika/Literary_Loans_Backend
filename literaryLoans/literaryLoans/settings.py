@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-u5+cdv9*ror-g-8)5&)*3@n!qjfe)a$0mnkf5ykazsr#%g)*v6
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = 'literaryLoans_app.User'
 
 # Application definition
 
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'literaryLoans_app',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
