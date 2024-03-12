@@ -28,6 +28,7 @@ Before you begin, ensure you have the following installed on your system:
 
 4. **Apply migrations**:
    ```
+   python3 manage.py makemigrations
    python3 manage.py migrate
    ```
 
