@@ -1,6 +1,6 @@
 from django.db import models
 
-class Book(models.model):
+class Book(models.Model):
     book_id = models.SmallIntegerField()
     title = models.CharField(default = '', max_length = 255)
     status = models.TextField(default='', max_length=1023)
