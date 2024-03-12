@@ -1,10 +1,11 @@
 from django.db import models
+import datetime
 
 class Rented(models.Model):
-    rent_id = models.SmallIntegerField()
-    borrower_id = models.SmallIntegerField()
-    lender_id = models.SmallIntegerField()
-    book_id = models.SmallIntegerField()
-    quantity = models.IntegerField()
-    rent_date = models.DateField()
-    return_date = models.DateField()
+    rent_id = models.SmallIntegerField(default=0)
+    borrower_id = models.SmallIntegerField(default=0)
+    lender_id = models.SmallIntegerField(default=0)
+    book_id = models.SmallIntegerField(default=0)
+    quantity = models.IntegerField(default=0)
+    rent_date = models.DateField(default=datetime.date.today)
+    return_date = models.DateField(default=datetime.date.today)

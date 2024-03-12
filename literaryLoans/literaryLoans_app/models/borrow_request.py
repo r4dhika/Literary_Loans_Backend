@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 class BorrowRequest(models.Model):
     stat = [
@@ -6,11 +7,11 @@ class BorrowRequest(models.Model):
         ('1', 'accepted'),
         ('2', 'rejected')
     ]
-    request_id = models.SmallIntegerField()
-    borrower_id = models.SmallIntegerField()
-    lender_id = models.SmallIntegerField()
-    book_id = models.SmallIntegerField()
+    request_id = models.SmallIntegerField(default=0)
+    borrower_id = models.SmallIntegerField(default=0)
+    lender_id = models.SmallIntegerField(default=0)
+    book_id = models.SmallIntegerField(default=0)
     status = models.CharField(max_length=1, choices=stat, default='0')
-    quantity = models.IntegerField()
-    request_date = models.DateField()
-    return_date = models.DateField()
+    quantity = models.IntegerField(default=0)
+    request_date = models.DateField(default=datetime.date.today)
+    return_date = models.DateField(default=datetime.date.today)
