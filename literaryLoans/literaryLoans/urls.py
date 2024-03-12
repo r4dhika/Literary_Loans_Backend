@@ -16,13 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from rest_framework_jwt.views import obtain_jwt_token
-from literaryLoans_app.views import protected
+# from rest_framework_jwt.views import obtain_jwt_token
+# from literaryLoans_app.views import protected
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-token-auth/', obtain_jwt_token),
-    path('protected/', protected),
+    # path('api-token-auth/', obtain_jwt_token),
+#     path('protected/', protected),
 ]
 
 
