@@ -1,5 +1,4 @@
 from .user import User 
-from .address import Address
 from .author import Author
 from .book_genre import BookGenre
 from .book import Book
