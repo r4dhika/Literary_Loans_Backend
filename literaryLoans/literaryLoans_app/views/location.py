@@ -2,6 +2,9 @@
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from literaryLoans_app.models import User
+from literaryLoans_app.models import Book
+from literaryLoans_app.serializers import AddressSerializer
 import requests
 import os
 
@@ -40,12 +43,9 @@ class CalculateDistance(APIView):
             # Handle request exceptions
             raise CalculateDistanceException(f"Failed to fetch origins from external API: {e}")
 
-    def get(self, request):
+    def get_distances(self, user_id):
         # Base URL of the external API
         base_url = 'http://api.distancematrix.ai/maps/api/distancematrix/json'
-
-        # Retrieve the user ID of the currently logged-in user
-        user_id = 1
 
         try:
             # Fetch origins using the helper function
@@ -61,7 +61,7 @@ class CalculateDistance(APIView):
 
         # Retrieve the API key from environment variables
         api_key = os.getenv('API_KEY')
-        print(api_key)
+        # print(api_key)
         if not api_key:
             return Response({"error": "API key not found"}, status=500)
 
@@ -78,13 +78,36 @@ class CalculateDistance(APIView):
                 data = response.json()
 
                 # Process the data or return it directly
-                return Response(data)
+                return data
             else:
                 # Handle other status codes if needed
                 return Response({"error": "Failed to fetch data from external API"}, status=response.status_code)
         except requests.exceptions.RequestException as e:
             # Handle connection errors or timeouts
             return Response({"error": str(e)}, status=500)
+        
+    def get(self, request):
+        user_id = 1
+        api_response = self.get_distances(user_id)
+
+        if api_response.get('status') != 'OK':
+            return Response({"error": "Failed to calculate distances"}, status=500)
+
+        distances = [element['distance']['value'] for element in api_response['rows'][0]['elements']]
+        users = User.objects.exclude(id = user_id)
+        serializer = AddressSerializer(users, many=True)
+
+        sorted_users = sorted(zip(distances, serializer.data))
+
+        books_by_users = {}
+        for user in sorted_users:
+
+            user_id = user[1]['id']
+            user_books = Book.objects.filter(lender_id=user_id)
+            books_by_users[user_id] = [book.title for book in user_books]
+
+        return Response(books_by_users)
+
 
 class CalculateDistanceException(Exception):
     pass
