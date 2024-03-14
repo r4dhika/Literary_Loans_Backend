@@ -10,4 +10,4 @@ class BookListAPIView(generics.ListAPIView):
 class BookDestroyAPIView(generics.DestroyAPIView):
     queryset=Book.objects.all()
     serializer_class=BookSerializer
-    lookup_field='book_id'
+    lookup_field='books_id'
