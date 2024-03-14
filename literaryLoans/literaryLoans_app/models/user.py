@@ -21,7 +21,7 @@ class User(AbstractUser):
     city = models.CharField('City', max_length=255, null=True, blank=True)
     state = models.CharField('State', max_length=255, null=True, blank=True)
     country = models.CharField('Country', max_length=255, null=True, blank=True)
-    REQUIRED_FIELDS = ['email', 'password']
+
 
     def __str__(self):
         return self.email
