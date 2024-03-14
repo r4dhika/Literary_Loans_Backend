@@ -15,5 +15,6 @@ urlpatterns = [
     path('destinations/<int:user_id>/', views.UserDestinations.as_view(), name='User Destinations'),
     path('calculateDistance/', views.CalculateDistance.as_view(), name = 'Estimated Distances'),
     path('auth/google/token/', views.google_token, name="login-with-google"),
-    path('borrowRequests/<int:user_id>/', views.BorrowRequestListAPIView.as_view(), name='Borrow Request')
+    path('borrowRequests/<int:user_id>/', views.BorrowRequestListAPIView.as_view(), name='Borrow Request'),
+    path('auth/data/', views.user_data, name="user data"),
 ]
