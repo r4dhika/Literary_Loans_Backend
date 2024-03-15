@@ -52,7 +52,7 @@ class RentedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=Rented
-        field='__all__'
+        fields='__all__'
 
 
 
