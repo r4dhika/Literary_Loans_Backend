@@ -17,7 +17,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fieldss=['id', 'addressLine1', 'addressLine2', 'city', 'state', 'country']
+        fields=['id', 'addressLine1', 'addressLine2', 'city', 'state', 'country']
 
 
 class AuthorSerializer(serializers.ModelSerializer):

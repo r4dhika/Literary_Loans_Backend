@@ -9,6 +9,7 @@ class User(AbstractUser):
     ]
     email = models.EmailField('email', unique = True)
     phone_no = models.CharField('Phone Number', max_length=10, null=True, blank=True)
+    phone_no = models.CharField('Phone Number', max_length=10, null=True, blank=True)
     pincode = models.BigIntegerField('Pincode', null = True, blank = True)
     age = models.IntegerField('Age', null=True, blank=True)
     gender = models.CharField(max_length=1, choices=gen, default='n')
