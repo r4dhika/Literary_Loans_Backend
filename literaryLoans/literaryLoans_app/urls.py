@@ -7,7 +7,7 @@ urlpatterns = [
     # Define the URL pattern for retrieving user addresses
     path('books/', views.BookListAPIView.as_view(), name='book-list'),
     path('borrowRequests/<int:user_id>/', views.BorrowRequestListAPIView.as_view(), name='Borrow Request'),
-    path('books/delete/<int:pk>/', views.BookDestroyAPIView.as_view(), name = 'book Delete'),
+    path('books/delete/<int:book_id>/', views.BookDestroyAPIView.as_view(), name = 'book Delete'),
     path('borrowedbooks/<int:user_id>/', views.BorrowedbooksListAPIView.as_view(), name = 'Borrowed Books'),
     path('lendedbooks/<int:user_id>/', views.LendedbooksListAPIView.as_view(), name = 'Lended Books'),
     path('requestedbooks/<int:user_id>/', views.RequestedbooksListAPIView.as_view(), name = 'Requested Books'),
@@ -17,5 +17,7 @@ urlpatterns = [
     path('auth/google/token/', views.google_token, name="login-with-google"),
     path('borrowRequests/<int:user_id>/', views.BorrowRequestListAPIView.as_view(), name='Borrow Request'),
     path('auth/data/', views.user_data, name="user data"),
-    
+    path('profile/<int:id>/', views.UserDetailAPIView.as_view(), name = "Profile"),
+    path('onboard/', views.onboarding, name = "onboarding"),
+    path('book/create/', views.createBook, name = "Book Create")
 ]
