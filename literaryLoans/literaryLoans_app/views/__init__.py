@@ -12,7 +12,4 @@ from .userAddresses import user_addresses
 from .userAddresses import UserDestinations
 from .auth import google_token
 from .auth import user_data
-from .book import BookDestroyAPIView
-from .Borrowedbooks import BorrowedbooksListAPIView
-from .Lendedbooks import LendedbooksListAPIView
-from .Requestedbooks import RequestedbooksListAPIView
+
