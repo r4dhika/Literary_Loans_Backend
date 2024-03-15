@@ -16,8 +16,8 @@ class BookSerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model=Address
-        fields='__all__'
+        model=User
+        fieldss=['id', 'addressLine1', 'addressLine2', 'city', 'state', 'country']
 
 
 class AuthorSerializer(serializers.ModelSerializer):
