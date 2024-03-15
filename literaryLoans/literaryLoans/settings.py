@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'literaryLoans_app',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -116,11 +117,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     ],
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 
 # Internationalization

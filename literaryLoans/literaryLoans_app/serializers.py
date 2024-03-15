@@ -20,13 +20,6 @@ class AddressSerializer(serializers.ModelSerializer):
         fields=['id', 'addressLine1', 'addressLine2', 'city', 'state', 'country']
 
 
-class AuthorSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model=Author
-        fields='__all__'
-
-
 class BookGenreSerializer(serializers.ModelSerializer):
 
     class Meta:

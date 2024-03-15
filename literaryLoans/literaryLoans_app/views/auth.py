@@ -9,6 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 from literaryLoans_app.models import User
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from rest_framework.authtoken.models import Token
+from literaryLoans_app.serializers import UserSerializer
+from rest_framework.decorators import api_view
 
 @csrf_exempt
 def google_token(request):
@@ -66,44 +69,44 @@ def user_data(request):
             if response.status_code == 200:
                 response_data = response.json()
                 print("response data", response_data)
+                email = response_data['email']
         
                 try:
                     email = response_data['email']
-                    print("email ", email)
+                    parts = email.split("@")
+                    username = parts[0]
+                    print("email", email)
                     existing_user = User.objects.get(email = email)
+                    existing_user.email = email
                     existing_user.first_name = response_data['given_name']
                     existing_user.last_name = response_data['family_name']
-                    parts = email.split("@")
-                    existing_user.username = parts[0]
+                    existing_user.picture = response_data['picture']
+                    existing_user.username = username
                     existing_user.save()
-                    # token = Token.objects.get(user=existing_user)
-                    # print(token.key)
-                    # token_key = token.key
-                    user = existing_user
-                    print(user)
             
                 except:
                     print("except")
-                    print()
+                    parts = email.split("@")
+                    username = parts[0]
                     new_user = User.objects.create(
                         email = response_data['email'],
                         first_name = response_data['given_name'],
-                        last_name = response_data['family_name']
+                        last_name = response_data['family_name'],
+                        picture = response_data['picture'],
+                        username = username
                     )
+                    print("new_user", new_user)
                     new_user.save()
-                    print(new_user)
-                    # token = Token.objects.create(user=new_user)
-                    # print(token.key)
-                    # token_key = token.key
-                    user = new_user
-            
-                # user = User.objects.get(enrollment = username)
-                # print("user")
-                # token = Token.objects.get(user = user)
-                # authtoken = token.key
-                # userId = user.id 
-                print("Response Data", response_data)
-                return HttpResponse(response)
+                    token = Token.objects.create(user=new_user)
+
+                user = User.objects.get(email = email)   
+                token = Token.objects.get(user = user)
+                user_data = UserSerializer(user)
+                data = user_data.data
+                token_str = "Token "
+                token_str += token.key
+                data["token"] = token_str
+                return JsonResponse(data)
             
             else:
                 return JsonResponse({'error': 'Request failed due to status code :'}, response.status_code)
@@ -116,3 +119,45 @@ def user_data(request):
     else:
         # Access token not found in cookie
         return JsonResponse({'error': 'Access token not found'}, status=401)
+    
+@api_view(['POST'])
+def onboarding(request):
+    if request.method == 'POST':
+        # Parse request body to get addressline1, addressline2, city, state, country, and email
+        request_body = request.body
+        print(request_body)
+        json_data = json.loads(request_body.decode('utf-8'))
+        print("jsondata", json_data)
+        data = json_data['details']
+        # Access the 'code' key from the JSON data
+        addressline1 = data['addressline1']
+        addressline2 = data['addressline2']
+        city = data['city']
+        state = data['state']
+        country = data['country']
+        email = data['email']
+        phoneNumber = data['phoneNumber']
+        
+        print(email)
+
+        # Check if email is provided
+        if not email:
+            return JsonResponse({'error': 'Email is required'}, status=400)
+
+        # Update user model with provided information
+        try:
+            user = User.objects.get(email=email)
+            user.addressLine1 = addressline1
+            user.addressLine2 = addressline2
+            user.city = city
+            user.state = state
+            user.country = country
+            user.phone_no = phoneNumber
+            user.isOnboarded = True
+            user.save()
+            return JsonResponse({'message': 'User details updated successfully'}, status=200)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+    #take addressline1 , 2, city, state, country, email from body and update user model with given email
