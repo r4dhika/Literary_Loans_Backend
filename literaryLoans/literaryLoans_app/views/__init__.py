@@ -18,3 +18,6 @@ from .book import createBook
 from .ReturnRequest import lender_return
 from .ReturnRequest import accept_return_request
 from .ReturnRequest import create_return_request
+from .BorrowRequest import  createBorrowRequest
+from .BorrowRequest import  acceptBorrowRequest
+from .BorrowRequest import rejectBorrowRequest
