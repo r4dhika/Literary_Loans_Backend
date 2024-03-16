@@ -8,7 +8,6 @@ class ReturnRequest(models.Model):
         ('0', 'Pending'),
         ('1', 'Accepted')
     ]
-    request_id = models.SmallIntegerField(default=0)
     borrower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="return_requests_as_borrower")
     lender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="return_requests_as_lender")
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="return_requests")

@@ -34,7 +34,7 @@ class GenreSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 
-class  BorrowRequestSerializer(serializers.ModelSerializer):
+class BorrowRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=BorrowRequest
@@ -47,5 +47,10 @@ class RentedSerializer(serializers.ModelSerializer):
         model=Rented
         fields='__all__'
 
+class ReturnRequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=BorrowRequest
+        fields='__all__'
 
 

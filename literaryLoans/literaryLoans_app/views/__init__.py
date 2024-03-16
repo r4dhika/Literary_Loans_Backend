@@ -15,3 +15,6 @@ from .auth import user_data
 from .auth import onboarding
 from .profile import UserDetailAPIView
 from .book import createBook
+from .ReturnRequest import lender_return
+from .ReturnRequest import accept_return_request
+from .ReturnRequest import create_return_request
