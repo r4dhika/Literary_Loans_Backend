@@ -15,7 +15,7 @@ class BookListAPIView(generics.ListAPIView):
 class BookDestroyAPIView(generics.DestroyAPIView):
     queryset=Book.objects.all()
     serializer_class=BookSerializer
-    lookup_field='book_id'
+    lookup_field='id'
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -23,23 +23,27 @@ class BookDestroyAPIView(generics.DestroyAPIView):
 def createBook(request):
     if request.method == 'POST':
         try:
-            email = request.user
+            user = request.user
             data = request.body
             json_data = json.loads(data.decode('utf-8'))
             # Retrieve the lender user instance
-            lender = User.objects.get(email=email)
+            lender = user
             print(lender)
-
+            print("body",json_data)
+            data = json_data['bookDetails']
+            title_book = data['bookName']
+            print("title",title_book)
             # Create a new book instance and set the lender_id field
             new_book = Book.objects.create(
-                title=json_data.get('title', ''),
-                description=json_data.get('description', ''),
-                lender_id=lender,
-                price=json_data.get('price', 0.00),
-                penalty=json_data.get('penalty', 0.00),
-                quantity=json_data.get('quantity', 0),
-                image=json_data.get('image', '')
+                title = data['bookName'],
+                description = data['bookDescription'],
+                lender_id = lender,
+                price = data['price'],
+                penalty = data['penalty'],
+                image = data['coverImageUrl'],
+                author = data['authorName']
             )
+            print("new book", new_book)
             new_book.save()
 
             return JsonResponse({"message": "success"})

@@ -10,3 +10,7 @@ class BorrowRequestListAPIView(generics.ListAPIView):
         user_id = self.kwargs.get('user_id')
         return BorrowRequest.objects.filter(lender_id=user_id).filter(status='0')
         
+    
+
+
+

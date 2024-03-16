@@ -9,7 +9,6 @@ class BorrowRequest(models.Model):
         ('1', 'Accepted'),
         ('2', 'Rejected')
     ]
-    request_id = models.SmallIntegerField(default=0)
     borrower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="borrower_borrow_requests")
     lender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lender_borrow_requests")
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="borrow_requests")
@@ -17,3 +16,4 @@ class BorrowRequest(models.Model):
     quantity = models.IntegerField(default=0)
     request_date = models.DateField(default=datetime.date.today)
     return_date = models.DateField(default=datetime.date.today)
+

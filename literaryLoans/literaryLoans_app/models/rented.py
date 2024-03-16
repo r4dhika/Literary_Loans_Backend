@@ -4,7 +4,6 @@ from .user import User
 from .book import Book
 
 class Rented(models.Model):
-    rent_id = models.SmallIntegerField(default=0)
     lender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lender_rented_books")
     borrower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="borrower_rented_books")
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="rented_books")
