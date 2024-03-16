@@ -3,19 +3,32 @@ from rest_framework import generics
 from ..models import Book, User
 from ..serializers import BookSerializer
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import authentication_classes, permission_classes, api_view
+from rest_framework.response import Response
 import json
 
 
 class BookListAPIView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class=BookSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        print("queryset", queryset)
+        serializer = BookSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
 
 class BookDestroyAPIView(generics.DestroyAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes=[IsAuthenticated]
     queryset=Book.objects.all()
     serializer_class=BookSerializer
     lookup_field='id'
+
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
