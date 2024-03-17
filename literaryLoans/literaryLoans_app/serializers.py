@@ -35,10 +35,13 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class BorrowRequestSerializer(serializers.ModelSerializer):
+    book = BookSerializer()
+    lender = UserSerializer()
+    borrower = UserSerializer()
 
     class Meta:
-        model=BorrowRequest
-        fields='__all__'
+        model = BorrowRequest
+        fields = ['id', 'borrower', 'lender', 'book', 'status', 'quantity', 'request_date', 'return_date']
 
 
 class RentedSerializer(serializers.ModelSerializer):
