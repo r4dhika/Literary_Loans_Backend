@@ -16,10 +16,8 @@ class BorrowRequestListAPIView(generics.ListAPIView):
 
     def list(self, request):
         user = request.user
-        queryset = BorrowRequest.objects.filter(lender=user.id).order_by('request_date')
-        print("queryset", queryset)
+        queryset = BorrowRequest.objects.filter(lender=user.id).filter(status='0').order_by('request_date')
         serializer = BorrowRequestSerializer(queryset, many=True)
-        print(serializer.data)
         return Response(serializer.data)    
     
 class BorrowRequestStatusListAPIView(generics.ListAPIView):
@@ -29,15 +27,13 @@ class BorrowRequestStatusListAPIView(generics.ListAPIView):
 
     def list(self, request):
         user = request.user
-        queryset = BorrowRequest.objects.filter(borrower=user.id).order_by('request_date')
-        print("queryset", queryset)
+        queryset = BorrowRequest.objects.filter(borrower=user.id).order_by('-request_date')
         serializer = BorrowRequestSerializer(queryset, many=True)
-        print(serializer.data)
         data = serializer.data  # Extract data from the serializer
         for item in data:
-            if item['status'] == 1:
+            if item['status'] == "1":
                 item['status'] = "Accepted"
-            elif item['status'] == 2:
+            elif item['status'] == "2":
                 item['status'] = "Cancelled"
             else:
                 item['status'] = "Pending"
@@ -50,13 +46,12 @@ def createBorrowRequest(request):
     if request.method == 'POST':
         try:
             data=request.body
-            json_data = request.data.copy()
-            lender_id=json_data['lender_id']
-            lender=User.objects.get(id=lender_id)
-            print(lender.id)
-            borrower=request.user
+            json_data = request.data['bookDetails']
             book_id=json_data['book_id']
             book=Book.objects.get(id=book_id)
+            lender_id=book.lender_id
+            lender=User.objects.get(email=lender_id)
+            borrower=request.user
             if (book.quantity < json_data['quantity']):
                 return JsonResponse({"error": "Requested quantity exceeds available quantity"}, status=400)
 
@@ -66,7 +61,7 @@ def createBorrowRequest(request):
                 book=book,
                 status='0',
                 quantity=json_data['quantity'],
-                request_date=json_data['request_date'],
+                request_date=datetime.date.today(),  
                 return_date=json_data['return_date']
             )
             new_borrowrequest.save()
@@ -86,7 +81,7 @@ def createBorrowRequest(request):
 def acceptBorrowRequest(request):
     if request.method == 'POST':
         try:
-            json_data=request.data
+            json_data = request.data['bookDetails']
             lender=request.user
             request_id=json_data['request_id']
             borrowrequest_instance=BorrowRequest.objects.get(id=request_id)
@@ -97,7 +92,6 @@ def acceptBorrowRequest(request):
                 borrower=borrowrequest_instance.borrower,
                 book=borrowrequest_instance.book,
                 quantity=borrowrequest_instance.quantity,
-                request_date=borrowrequest_instance.request_date,
                 return_date=borrowrequest_instance.return_date
             )
             new_rented_instance.save()
@@ -107,7 +101,6 @@ def acceptBorrowRequest(request):
             book.quantity=book.quantity-borrowrequest_instance.quantity
             if(book.quantity==0):
                 book.status='1'
-            print(book.quantity)
             book.save()
             return JsonResponse({"message": "success"})
         except User.DoesNotExist:
@@ -123,7 +116,7 @@ def acceptBorrowRequest(request):
 def rejectBorrowRequest(request):
     if request.method == 'POST':
         try:
-            json_data=request.data
+            json_data=request.data['bookDetails']
             request_id=json_data['request_id']
             borrowrequest_instance=BorrowRequest.objects.get(id=request_id)
             borrowrequest_instance.status='2'
@@ -135,9 +128,3 @@ def rejectBorrowRequest(request):
             return JsonResponse({"error": str(e)}, status=500)
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)
-    
-
-
-    
-
-

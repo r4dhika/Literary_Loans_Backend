@@ -7,6 +7,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class BookSerializer(serializers.ModelSerializer):
+    lender_id = UserSerializer()
+    borrower_id = UserSerializer()
 
     class Meta:
         model=Book

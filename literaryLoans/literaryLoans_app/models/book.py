@@ -20,4 +20,4 @@ class Book(models.Model):
     total_book_rating = models.IntegerField(default=0)
     condition_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     total_condition_rating = models.IntegerField(default=0)
-    image = models.CharField(max_length=1024, default = '')
+    image = models.CharField(max_length=10000, default = '')

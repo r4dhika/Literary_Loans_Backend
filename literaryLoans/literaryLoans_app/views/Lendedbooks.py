@@ -6,11 +6,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-class LendedbooksListAPIView(APIView):
+class LendedbooksListAPIView(generics.ListAPIView):
     serializer_class=RentedSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self,request):
+    def list(self,request):
         user = request.user
-        return Response(Rented.objects.filter(lender=user).order_by('return_date'))
+        queryset = Rented.objects.filter(lender=user).order_by('return_date')
+        serializer = RentedSerializer(queryset, many=True)
+        return Response(serializer.data)  
+    
