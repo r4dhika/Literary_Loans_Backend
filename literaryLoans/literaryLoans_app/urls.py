@@ -7,6 +7,7 @@ urlpatterns = [
     # Define the URL pattern for retrieving user addresses
     path('books/', views.BookListAPIView.as_view(), name='book-list'),
     path('borrowRequests/', views.BorrowRequestListAPIView.as_view(), name='Borrow Request'),
+    path('returnRequests/', views.ReturnRequestListAPIView.as_view(), name='Return Request'),
     path('borrowRequestStatus/', views.BorrowRequestStatusListAPIView.as_view(), name = 'Borrow Request Status'),
     path('books/delete/<int:id>/', views.BookDestroyAPIView.as_view(), name = 'book Delete'),
     path('borrowedbooks/', views.BorrowedbooksListAPIView.as_view(), name = 'Borrowed Books'),
@@ -26,5 +27,5 @@ urlpatterns = [
     path('create_return_request/', views.create_return_request, name='create-return-request'),
     path('create_borrow_request/',views.createBorrowRequest,name='create-borrow-request'),
     path('accept_borrow_request/',views.acceptBorrowRequest,name='accept_borrow_request'),
-    path('reject_borrow_request/',views.rejectBorrowRequest,name='reject_borrow_request')
+    path('reject_borrow_request/',views.rejectBorrowRequest,name='reject_borrow_request'),
 ]

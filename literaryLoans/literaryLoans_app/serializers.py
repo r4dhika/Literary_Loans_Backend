@@ -47,6 +47,7 @@ class BorrowRequestSerializer(serializers.ModelSerializer):
 
 
 class RentedSerializer(serializers.ModelSerializer):
+    book = BookSerializer()
 
     class Meta:
         model=Rented
@@ -55,7 +56,7 @@ class RentedSerializer(serializers.ModelSerializer):
 class ReturnRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model=BorrowRequest
+        model=ReturnRequest
         fields='__all__'
 
 

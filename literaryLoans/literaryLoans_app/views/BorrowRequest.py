@@ -27,7 +27,7 @@ class BorrowRequestStatusListAPIView(generics.ListAPIView):
 
     def list(self, request):
         user = request.user
-        queryset = BorrowRequest.objects.filter(borrower=user.id).order_by('-request_date')
+        queryset = BorrowRequest.objects.filter(borrower=user.id).filter(status="0").order_by('-request_date')
         serializer = BorrowRequestSerializer(queryset, many=True)
         data = serializer.data  # Extract data from the serializer
         for item in data:
