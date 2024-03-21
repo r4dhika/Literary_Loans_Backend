@@ -8,7 +8,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 class BookSerializer(serializers.ModelSerializer):
     lender_id = UserSerializer()
-    borrower_id = UserSerializer()
+
+    class Meta:
+        model=Book
+        fields='__all__'
+
+class BookSerializerReturn(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        exclude = ('lender_id',)
+
+class BookSerializerReturn(serializers.ModelSerializer):
 
     class Meta:
         model=Book
@@ -54,6 +64,7 @@ class RentedSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class ReturnRequestSerializer(serializers.ModelSerializer):
+    book = BookSerializerReturn(read_only=True)
 
     class Meta:
         model=ReturnRequest

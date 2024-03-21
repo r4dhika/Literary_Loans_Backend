@@ -12,7 +12,6 @@ class Book(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     penalty = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     lender_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="book_lender")
-    borrower_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="book_borrower", null=True, blank=True)
     quantity = models.IntegerField(default=0)
     author = models.CharField(max_length=255)
     available = models.BooleanField(default=True)

@@ -54,7 +54,8 @@ def createBook(request):
                 price = data['price'],
                 penalty = data['penalty'],
                 image = data['coverImageUrl'],
-                author = data['authorName']
+                author = data['authorName'],
+                quantity = data['quantity']
             )
             print("new book", new_book)
             new_book.save()

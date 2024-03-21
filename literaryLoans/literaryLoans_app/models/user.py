@@ -21,6 +21,7 @@ class User(AbstractUser):
     state = models.CharField('State', max_length=255, null=True, blank=True)
     country = models.CharField('Country', max_length=255, null=True, blank=True)
     picture = models.CharField('Image',  max_length = 255, null=True, blank=True)
+    password = models.CharField('Password', max_length = 255, null = True, blank = True)
     # USERNAME_FIELD = ['email']
 
     def __str__(self):

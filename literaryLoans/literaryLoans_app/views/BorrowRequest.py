@@ -52,6 +52,8 @@ def createBorrowRequest(request):
             lender_id=book.lender_id
             lender=User.objects.get(email=lender_id)
             borrower=request.user
+            print("book quantitiy", book.quantity)
+            print("requested quantity", json_data['quantity'])
             if (book.quantity < json_data['quantity']):
                 return JsonResponse({"error": "Requested quantity exceeds available quantity"}, status=400)
 

@@ -120,6 +120,7 @@ def user_data(request):
         # Access token not found in cookie
         return JsonResponse({'error': 'Access token not found'}, status=401)
     
+@csrf_exempt    
 @api_view(['POST'])
 def onboarding(request):
     if request.method == 'POST':
