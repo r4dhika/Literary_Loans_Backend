@@ -103,6 +103,7 @@ def acceptBorrowRequest(request):
             book.quantity=book.quantity-borrowrequest_instance.quantity
             if(book.quantity==0):
                 book.status='1'
+                book.available = False
             book.save()
             return JsonResponse({"message": "success"})
         except User.DoesNotExist:

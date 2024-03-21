@@ -79,6 +79,7 @@ def accept_return_request(request):
         book = return_request_instance.book
         book_instance = Book.objects.get(id = book.id)
         book_instance.quantity += return_request_instance.quantity
+        book_instance.status = '1'
         book_instance.available = True
         book_instance.save()
 
@@ -97,7 +98,7 @@ def accept_return_request(request):
 @permission_classes([IsAuthenticated])
 def lender_return(request):
     if request.method == 'POST':
-        json_data = request.data
+        json_data = request.data['bookDetails']
         rented_id = json_data['rented_id']
         try:
             rented_instance = Rented.objects.get(id=rented_id)
@@ -107,6 +108,7 @@ def lender_return(request):
         # Update quantity and available status of the corresponding book
         book_instance = rented_instance.book
         book_instance.quantity += rented_instance.quantity
+        book_instance.status = '1'
         book_instance.available = True
         book_instance.save()
 
