@@ -120,16 +120,13 @@ def user_data(request):
         # Access token not found in cookie
         return JsonResponse({'error': 'Access token not found'}, status=401)
     
-@csrf_exempt    
+  
 @api_view(['POST'])
 def onboarding(request):
     if request.method == 'POST':
         # Parse request body to get addressline1, addressline2, city, state, country, and email
-        request_body = request.body
-        print(request_body)
-        json_data = json.loads(request_body.decode('utf-8'))
-        print("jsondata", json_data)
-        data = json_data['details']
+        data = request.data['details']
+        print("data", data)
         # Access the 'code' key from the JSON data
         addressline1 = data['addressline1']
         addressline2 = data['addressline2']
