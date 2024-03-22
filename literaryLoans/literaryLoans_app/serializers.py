@@ -29,7 +29,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields=['id', 'addressLine1', 'addressLine2', 'city', 'state', 'country']
+        fields=['id', 'addressLine1', 'addressLine2', 'city', 'state', 'country', 'isOnboarded']
 
 
 class BookGenreSerializer(serializers.ModelSerializer):

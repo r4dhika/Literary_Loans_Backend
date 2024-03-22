@@ -26,7 +26,13 @@ class CalculateDistance(APIView):
             origins_data = origins_response.json()
 
             # Extract origins from the response
-            origins = '|'.join(', '.join([address['addressLine1'], address['addressLine2'], address['city'], address['state'], address['country']]) for address in origins_data)
+            origins = '|'.join(', '.join([
+            address.get('addressLine1', ''),
+            address.get('addressLine2', ''),
+            address.get('city', ''),
+            address.get('state', ''),
+            address.get('country', '')])
+            for address in origins_data if address.get('isOnboarded') == True)
             return origins
         except requests.exceptions.RequestException as e:
             # Handle request exceptions
@@ -43,7 +49,13 @@ class CalculateDistance(APIView):
             destinations_data = destinations_response.json()
 
             # Extract origins from the response
-            destinations = '|'.join(', '.join([address['addressLine1'], address['addressLine2'], address['city'], address['state'], address['country']]) for address in destinations_data)
+            destinations = '|'.join(', '.join([
+            address.get('addressLine1', ''),
+            address.get('addressLine2', ''),
+            address.get('city', ''),
+            address.get('state', ''),
+            address.get('country', '')])
+            for address in destinations_data if address.get('isOnboarded') == True)
             return destinations
         except requests.exceptions.RequestException as e:
             # Handle request exceptions
