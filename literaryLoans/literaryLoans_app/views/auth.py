@@ -12,6 +12,8 @@ from django.shortcuts import redirect
 from rest_framework.authtoken.models import Token
 from literaryLoans_app.serializers import UserSerializer
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 @csrf_exempt
 def google_token(request):
@@ -159,3 +161,10 @@ def onboarding(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
     #take addressline1 , 2, city, state, country, email from body and update user model with given email
+
+
+class Logout(APIView):
+    def post(self, request):
+        response = Response({"message": "Cookie deleted successfully"})
+        response.delete_cookie('google_access_token')
+        return response
