@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from rest_framework import generics
-from ..models import Book, User
+from ..models import Book, User, Genre
 from ..serializers import BookSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -46,16 +46,18 @@ def createBook(request):
             data = json_data['bookDetails']
             title_book = data['bookName']
             print("title",title_book)
+            genre_id = data['bookGenre']
+            bookgenre = Genre.objects.get(id = genre_id)
             # Create a new book instance and set the lender_id field
             new_book = Book.objects.create(
                 title = data['bookName'],
                 description = data['bookDescription'],
                 lender_id = lender,
                 price = data['price'],
-                penalty = data['penalty'],
                 image = data['coverImageUrl'],
                 author = data['authorName'],
-                quantity = data['quantity']
+                quantity = data['quantity'],
+                genre = bookgenre
             )
             print("new book", new_book)
             new_book.save()
