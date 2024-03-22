@@ -4,11 +4,17 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from literaryLoans_app.models import User
 from literaryLoans_app.models import Book
-from literaryLoans_app.serializers import AddressSerializer
+from literaryLoans_app.serializers import AddressSerializer, BookSerializer
 import requests
 import os
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 class CalculateDistance(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
     def get_origins(self, user_id):
         # Construct the URL for fetching origins, including the user ID
         origins_api_url = f'http://localhost:8000/address/{user_id}'
@@ -87,28 +93,27 @@ class CalculateDistance(APIView):
             return Response({"error": str(e)}, status=500)
         
     def get(self, request):
-        user_id = 1
-        api_response = self.get_distances(user_id)
+        user = request.user
+        print("user", user)
+        api_response = self.get_distances(user.id)
 
         if api_response.get('status') != 'OK':
             return Response({"error": "Failed to calculate distances"}, status=500)
 
         distances = [element['distance']['value'] for element in api_response['rows'][0]['elements']]
-        users = User.objects.exclude(id = user_id)
+        users = User.objects.exclude(id = user.id)
         serializer = AddressSerializer(users, many=True)
 
-        sorted_users = sorted(zip(distances, serializer.data))
-
-        books_by_users = {}
+        sorted_users = [(distance, data) for distance, data in zip(distances, serializer.data)]
+        sorted_users.sort(key=lambda x: x[0])
+        print(sorted_users)
+        serialized_books_list = []
         for user in sorted_users:
-
-            user_id = user[1]['id']
-            user_books = Book.objects.filter(lender_id=user_id)
-            books_by_users[user_id] = [book.title for book in user_books]
-
-        return Response(books_by_users)
+            user_books = Book.objects.filter(lender_id=user[1]['id'])
+            serializer = BookSerializer(user_books, many=True)
+            serialized_books_list.extend(serializer.data)
+        return Response(serialized_books_list)
 
 
 class CalculateDistanceException(Exception):
     pass
-

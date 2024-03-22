@@ -1,5 +1,6 @@
 from django.db import models
 from .user import User
+from .genre import Genre
 
 class Book(models.Model):
     stat = [
@@ -20,3 +21,4 @@ class Book(models.Model):
     condition_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     total_condition_rating = models.IntegerField(default=0)
     image = models.CharField(max_length=10000, default = '')
+    genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, related_name="book_genre", null=True, blank=True)

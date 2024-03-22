@@ -28,5 +28,7 @@ urlpatterns = [
     path('create_borrow_request/',views.createBorrowRequest,name='create-borrow-request'),
     path('accept_borrow_request/',views.acceptBorrowRequest,name='accept_borrow_request'),
     path('reject_borrow_request/',views.rejectBorrowRequest,name='reject_borrow_request'),
-    path('logout/', views.Logout.as_view(), name = 'Logout')
+    path('logout/', views.Logout.as_view(), name = 'Logout'),
+    path('genre/', views.GenreListAPIView.as_view(), name='Genre'),
+    path('books/genre/<int:genre_id>/', views.BooksByGenreAPIView.as_view(), name='books-by-genre'),
 ]

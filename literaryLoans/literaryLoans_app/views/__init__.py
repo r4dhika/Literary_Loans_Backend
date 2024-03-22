@@ -24,3 +24,5 @@ from .BorrowRequest import  createBorrowRequest
 from .BorrowRequest import  acceptBorrowRequest
 from .BorrowRequest import rejectBorrowRequest
 from .auth import Logout
+from .genre import GenreListAPIView
+from .genre import BooksByGenreAPIView
