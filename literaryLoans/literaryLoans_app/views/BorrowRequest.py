@@ -8,6 +8,7 @@ from rest_framework.decorators import authentication_classes, permission_classes
 import json
 import datetime
 from rest_framework.response import Response
+from django.core.mail import send_mail
 
 class BorrowRequestListAPIView(generics.ListAPIView):
     serializer_class=BorrowRequestSerializer
@@ -52,6 +53,7 @@ def createBorrowRequest(request):
             lender_id=book.lender_id
             lender=User.objects.get(email=lender_id)
             borrower=request.user
+            print(json_data)
             print("book quantitiy", book.quantity)
             print("requested quantity", json_data['quantity'])
             if (book.quantity < json_data['quantity']):
@@ -67,7 +69,38 @@ def createBorrowRequest(request):
                 return_date=json_data['return_date']
             )
             new_borrowrequest.save()
+            subject = "New Borrow Request"
+            lender_name = lender.first_name + " " + lender.last_name
+            book_name = book.title
+            borrower_name = borrower.first_name + borrower.last_name
+            borrower_email = borrower.email
+            print(lender.first_name)
+            message = f"""
+Dear {lender_name},
 
+We hope this email finds you well. We wanted to inform you that a borrower has requested to borrow the books you have put on lend through our app. We appreciate your participation in our lending community and wanted to ensure that you are aware of this request.
+
+Here are the details of the request:
+
+Requested Book: {book_name}
+Borrower's Details:
+Name: {borrower_name}
+Email: {borrower_email}
+
+Please review this request and let us know if we approve it. You can confirm or deny the request directly through the website by accessing your dashboard.
+
+If you approve the request, we will facilitate the borrowing process and provide you with further instructions. If you deny the request or have any concerns, please don't hesitate to reach out to us.
+
+Thank you for your cooperation and for being part of our lending community. If you have any questions or need assistance, feel free to contact us anytime.
+
+Best regards,
+
+Literary Loans
+            """
+            print("subject", subject)
+            print("message", message)
+            recipient_list = [lender.email]
+            send_mail(subject, message, None, recipient_list)
             return JsonResponse({"message": "success"})
         except User.DoesNotExist:
             return JsonResponse({"error": "Lender does not exist"}, status=404)

@@ -17,7 +17,7 @@ class Command(BaseCommand):
                 description="Fact-based books that explore real events, people, or subjects, providing information or analysis."
             )
             Genre.objects.create(
-                title="Mystry", 
+                title="Mystery", 
                 description="Stories centered around solving a crime or unraveling a puzzle, often with suspenseful elements."
             )
             Genre.objects.create(
