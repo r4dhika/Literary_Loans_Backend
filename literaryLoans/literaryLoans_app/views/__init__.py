@@ -26,3 +26,4 @@ from .BorrowRequest import rejectBorrowRequest
 from .auth import Logout
 from .genre import GenreListAPIView
 from .genre import BooksByGenreAPIView
+from .sendEmail import EmailAPI

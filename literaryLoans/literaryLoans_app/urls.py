@@ -31,4 +31,5 @@ urlpatterns = [
     path('logout/', views.Logout.as_view(), name = 'Logout'),
     path('genre/', views.GenreListAPIView.as_view(), name='Genre'),
     path('books/genre/<int:genre_id>/', views.BooksByGenreAPIView.as_view(), name='books-by-genre'),
+    path('send-email/', views.EmailAPI),
 ]
