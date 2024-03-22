@@ -1,5 +1,4 @@
 myenv
 literaryLoans/db.sqlite3
 .env
-literaryLoans/literaryLoans_app/migrations
 

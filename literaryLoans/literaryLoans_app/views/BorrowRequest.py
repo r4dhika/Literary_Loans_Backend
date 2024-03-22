@@ -30,7 +30,7 @@ class BorrowRequestStatusListAPIView(generics.ListAPIView):
         user = request.user
         queryset = BorrowRequest.objects.filter(borrower=user.id).filter(status="0").order_by('-request_date')
         serializer = BorrowRequestSerializer(queryset, many=True)
-        data = serializer.data  # Extract data from the serializer
+        data = serializer.data 
         for item in data:
             if item['status'] == "1":
                 item['status'] = "Accepted"

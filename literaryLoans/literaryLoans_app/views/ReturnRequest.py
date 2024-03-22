@@ -33,12 +33,10 @@ def create_return_request(request):
         except Rented.DoesNotExist:
             return Response({"error": "Rented instance with the provided ID does not exist"}, status=status.HTTP_404_NOT_FOUND)
         
-        # Check if a ReturnRequest already exists for this Rented instance
         existing_return_request = ReturnRequest.objects.filter(rented_id=rented_instance.id).exists()
         if existing_return_request:
             return Response({"error": "ReturnRequest already exists for this Rented instance"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create a new instance of ReturnRequest with the existing Book instance
         new_return_request_instance = ReturnRequest.objects.create(
             borrower=rented_instance.borrower,
             lender=rented_instance.lender,
@@ -47,11 +45,9 @@ def create_return_request(request):
             rented_id=rented_instance
         )
 
-        # Optionally, set the request_date field
         new_return_request_instance.request_date = datetime.date.today()
         new_return_request_instance.save()
 
-        # Serialize the created ReturnRequest instance
         serializer = ReturnRequestSerializer(new_return_request_instance)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -72,8 +68,7 @@ def accept_return_request(request):
         except ReturnRequest.DoesNotExist:
             return Response({"error": "ReturnRequest instance with the provided ID does not exist"}, status=status.HTTP_404_NOT_FOUND)
         
-        # Update status to 'Accepted'
-        return_request_instance.status = '1'  # Assuming '1' represents 'Accepted' status
+        return_request_instance.status = '1' 
         return_request_instance.save()
         rented = return_request_instance.rented_id
         book = return_request_instance.book
@@ -88,7 +83,6 @@ def accept_return_request(request):
         except Rented.DoesNotExist:
             return Response({"error": "Rented instance with the provided ID does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Delete rented_instance
         rented_instance.delete()
         return Response({"message": "Return request accepted successfully"}, status=status.HTTP_200_OK)
     
@@ -105,14 +99,12 @@ def lender_return(request):
         except Rented.DoesNotExist:
             return Response({"error": "Rented instance with the provided ID does not exist"}, status=status.HTTP_404_NOT_FOUND)
         
-        # Update quantity and available status of the corresponding book
         book_instance = rented_instance.book
         book_instance.quantity += rented_instance.quantity
         book_instance.status = '1'
         book_instance.available = True
         book_instance.save()
 
-        # Delete the rented instance
         rented_instance.delete()
 
         return Response({"message": "Return by lender processed successfully"}, status=status.HTTP_200_OK)

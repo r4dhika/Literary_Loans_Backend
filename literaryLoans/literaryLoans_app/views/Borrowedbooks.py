@@ -14,11 +14,7 @@ class BorrowedbooksListAPIView(generics.ListAPIView):
 
     def list(self, request):
         user = request.user
-        # print("user", user)
-        # print(user.id)
         queryset = Rented.objects.filter(borrower=user.id).order_by('return_date')
-        # queryset = Rented.objects.all()
-        # print("queryset", queryset)
         serializer = RentedSerializer(queryset, many=True)
         return Response(serializer.data)    
 

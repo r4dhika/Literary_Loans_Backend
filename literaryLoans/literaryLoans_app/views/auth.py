@@ -1,5 +1,3 @@
-# views.py
-
 import os
 import requests
 import json
@@ -18,19 +16,14 @@ from rest_framework.response import Response
 @csrf_exempt
 def google_token(request):
     if request.method == 'POST':
-        # Get the values from the .env file
         client_id = config('GOOGLE_CLIENT_ID')
-        # print(client_id)
         client_secret = config('GOOGLE_CLIENT_SECRET')
         redirect_uri = config('GOOGLE_REDIRECT_URL')
         request_body = request.body
-        # Get the authorization code from the request body
         json_data = json.loads(request_body.decode('utf-8'))
 
-        # Access the 'code' key from the JSON data
         code = json_data['code']
 
-        # Exchange the authorization code for an access token
         token_url = 'https://oauth2.googleapis.com/token'
         token_data = {
             'code': code,
@@ -41,15 +34,10 @@ def google_token(request):
         }
         print(code)
         response = requests.post(token_url, data=token_data)
-        # print(response)
         token_info = response.json()
-        # print(token_info)
 
-        # Check if the access token was successfully obtained
         if 'access_token' in token_info:
-            # Set the access token as a cookie (secure your cookies in production)
             response = JsonResponse({'status': 'success'})
-            # print(token_info)
             response.set_cookie('google_access_token', token_info['access_token'], httponly=True)
             return response
         else:
@@ -59,14 +47,13 @@ def google_token(request):
 
 def user_data(request):
     access_token = request.COOKIES.get('google_access_token')
-    user_url = config('GOOGLE_USER_URL')  # Retrieve the user URL from environment variables
+    user_url = config('GOOGLE_USER_URL') 
     user_url += access_token
     if access_token:
         try:
             headers = {'Authorization': f'Bearer {access_token}'}
             response = requests.get(user_url, headers=headers)
 
-            # Check for network-related errors
             response.raise_for_status()
             if response.status_code == 200:
                 response_data = response.json()
@@ -113,23 +100,18 @@ def user_data(request):
             else:
                 return JsonResponse({'error': 'Request failed due to status code :'}, response.status_code)
         except requests.exceptions.RequestException as e:
-            # Handle network-related errors
             return JsonResponse({'error': 'Error fetching user data: ' + str(e)}, status=500)
         except ValueError:
-            # Handle invalid JSON response
             return JsonResponse({'error': 'Invalid JSON response from user API'}, status=500)
     else:
-        # Access token not found in cookie
         return JsonResponse({'error': 'Access token not found'}, status=401)
     
   
 @api_view(['POST'])
 def onboarding(request):
     if request.method == 'POST':
-        # Parse request body to get addressline1, addressline2, city, state, country, and email
         data = request.data['details']
         print("data", data)
-        # Access the 'code' key from the JSON data
         addressline1 = data['addressline1']
         addressline2 = data['addressline2']
         city = data['city']
@@ -140,11 +122,9 @@ def onboarding(request):
         
         print(email)
 
-        # Check if email is provided
         if not email:
             return JsonResponse({'error': 'Email is required'}, status=400)
 
-        # Update user model with provided information
         try:
             user = User.objects.get(email=email)
             user.addressLine1 = addressline1
@@ -160,7 +140,6 @@ def onboarding(request):
             return JsonResponse({'error': 'User not found'}, status=404)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
-    #take addressline1 , 2, city, state, country, email from body and update user model with given email
 
 
 class Logout(APIView):

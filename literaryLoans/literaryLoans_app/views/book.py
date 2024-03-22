@@ -39,7 +39,6 @@ def createBook(request):
             user = request.user
             data = request.body
             json_data = json.loads(data.decode('utf-8'))
-            # Retrieve the lender user instance
             lender = user
             print(lender)
             print("body",json_data)
@@ -48,7 +47,6 @@ def createBook(request):
             print("title",title_book)
             genre_id = data['bookGenre']
             bookgenre = Genre.objects.get(id = genre_id)
-            # Create a new book instance and set the lender_id field
             new_book = Book.objects.create(
                 title = data['bookName'],
                 description = data['bookDescription'],
