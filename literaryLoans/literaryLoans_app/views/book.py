@@ -45,8 +45,8 @@ def createBook(request):
             data = json_data['bookDetails']
             title_book = data['bookName']
             print("title",title_book)
-            genre_id = data['bookGenre']
-            bookgenre = Genre.objects.get(id = genre_id)
+            genre_title = data['bookGenre']
+            bookgenre = Genre.objects.get(title = genre_title)
             new_book = Book.objects.create(
                 title = data['bookName'],
                 description = data['bookDescription'],
