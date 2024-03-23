@@ -30,6 +30,6 @@ urlpatterns = [
     path('reject_borrow_request/',views.rejectBorrowRequest,name='reject_borrow_request'),
     path('logout/', views.Logout.as_view(), name = 'Logout'),
     path('genre/', views.GenreListAPIView.as_view(), name='Genre'),
-    path('books/genre/<int:genre_id>/', views.BooksByGenreAPIView.as_view(), name='books-by-genre'),
+    path('books/genre/<str:genre_id>/', views.BooksByGenreAPIView.as_view(), name='books-by-genre'),
     path('send-email/', views.EmailAPI),
 ]

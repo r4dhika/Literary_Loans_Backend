@@ -23,6 +23,7 @@ class BooksByGenreAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        genre_id = self.kwargs['genre_id']
+        genre = self.kwargs['genre_id']
+        genre_id = Genre.objects.get(title = genre)
         return Book.objects.filter(genre_id=genre_id)
     
